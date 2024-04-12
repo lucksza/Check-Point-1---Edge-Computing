@@ -1,0 +1,45 @@
+const int PIN_VERMELHO = 10;
+const int PIN_AMARELO = 9;
+const int PIN_VERDE = 8;
+const int PIN_BUZZER = 6;
+
+const int LIMIAR_ALTO = 700;
+const int LIMIAR_MEDIO = 600;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PIN_VERMELHO, OUTPUT);
+  pinMode(PIN_AMARELO, OUTPUT);
+  pinMode(PIN_VERDE, OUTPUT);
+  pinMode(PIN_BUZZER, OUTPUT);
+}
+
+void loop() {
+  int leituraLDR = analogRead(A0);
+  Serial.println(leituraLDR);
+
+  desativaTudo();
+
+  if (leituraLDR > LIMIAR_ALTO) {
+    ativaLuzComBuzzer(PIN_VERMELHO, 1000, 3000);
+  } else if (leituraLDR > LIMIAR_MEDIO) {
+    ativaLuzComBuzzer(PIN_AMARELO, 10000, 100);
+  } else {
+    digitalWrite(PIN_VERDE, HIGH);
+  }
+
+  delay(500);
+}
+
+void desativaTudo() {
+  digitalWrite(PIN_VERMELHO, LOW);
+  digitalWrite(PIN_AMARELO, LOW);
+  digitalWrite(PIN_VERDE, LOW);
+  digitalWrite(PIN_BUZZER, LOW);
+  noTone(PIN_BUZZER);
+}
+
+void ativaLuzComBuzzer(int pin, int freq, int duracao) {
+  digitalWrite(pin, HIGH);
+  tone(PIN_BUZZER, freq, duracao);
+}
